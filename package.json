@@ -1,0 +1,39 @@
+{
+  "name": "myport-server",
+  "version": "1.0.0",
+  "description": "myport server",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/myportdev/myport-server.git"
+  },
+  "author": "justin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zportdev/myport-server/issues"
+  },
+  "homepage": "https://github.com/zportdev/myport-server#readme",
+  "dependencies": {
+    "@admin-bro/express": "^3.1.0",
+    "@admin-bro/mongoose": "^1.1.0",
+    "admin-bro": "^4.0.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "express-rate-limit": "^6.3.0",
+    "express-session": "^1.17.2",
+    "helmet": "^5.0.2",
+    "ioredis": "^4.28.5",
+    "mongoose": "^6.0.14",
+    "node-schedule": "^2.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15",
+    "tslib": "^2.3.1"
+  }
+}

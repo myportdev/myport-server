@@ -5,7 +5,17 @@ const teamSchema = Schema({
     team_name: {
         type: String,
     },
-    user: [
+    team_leader: {
+        ref: "User",
+        type: Schema.Types.ObjectId,
+    },
+    team_members: [
+        {
+            ref: "User",
+            type: Schema.Types.ObjectId,
+        },
+    ],
+    waiting_for_support: [
         {
             ref: "User",
             type: Schema.Types.ObjectId,
@@ -17,7 +27,7 @@ const teamSchema = Schema({
     detail_explanation: {
         type: String,
     },
-    field: {
+    recruitment_field: {
         type: String,
     },
     team_type: {
@@ -26,11 +36,28 @@ const teamSchema = Schema({
     team_image_url: {
         type: String,
     },
-    team_type: {
-        type: Number,
-    },
     gender: {
         type: String,
+    },
+    relation_contest: {
+        type: Schema.Types.ObjectId,
+        ref: "Contest",
+    },
+    relation_extracurricular: {
+        type: Schema.Types.ObjectId,
+        ref: "Extracurricular",
+    },
+    recruiting: {
+        type: Boolean,
+        default: true,
+    },
+    create_date: {
+        type: Date,
+        default: Date.now,
+    },
+    update_date: {
+        type: Date,
+        default: Date.now,
     },
 });
 

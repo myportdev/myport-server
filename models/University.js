@@ -8,6 +8,14 @@ const universitySchema = Schema({
     major_name: {
         type: String,
     },
+    create_date: {
+        type: Date,
+        default: Date.now,
+    },
+    update_date: {
+        type: Date,
+        default: Date.now,
+    },
 });
 
 export default mongoose.model("University", universitySchema);

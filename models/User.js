@@ -2,7 +2,13 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const userSchema = Schema({
-    image_url: {
+    image_url_small: {
+        type: String,
+    },
+    image_url_medium: {
+        type: String,
+    },
+    image_url_large: {
         type: String,
     },
     email: {
@@ -24,7 +30,7 @@ const userSchema = Schema({
         type: String,
     },
     university: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: "University",
     },
     student_number: {
@@ -35,25 +41,25 @@ const userSchema = Schema({
     },
     interest_contest: [
         {
-            type: mongoose.Schema.Types.ObjectId,
+            type: Schema.Types.ObjectId,
             ref: "Contest",
         },
     ],
     interest_extracurricular: [
         {
-            type: mongoose.Schema.Types.ObjectId,
+            type: Schema.Types.ObjectId,
             ref: "Extracurricular",
         },
     ],
     interest: [
         {
-            type: mongoose.Schema.Types.ObjectId,
+            type: Schema.Types.ObjectId,
             ref: "Interest",
         },
     ],
     team: [
         {
-            type: mongoose.Schema.Types.ObjectId,
+            type: Schema.Types.ObjectId,
             ref: "Team",
         },
     ],
@@ -62,7 +68,13 @@ const userSchema = Schema({
     },
 
     join_date: {
-        type: String,
+        type: Date,
+        default: Date.now,
+    },
+
+    update_date: {
+        type: Date,
+        default: Date.now,
     },
 });
 

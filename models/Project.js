@@ -3,13 +3,18 @@ const Schema = mongoose.Schema;
 
 const projectSchema = Schema({
     portfolio: { ref: "Portfolio", type: Schema.Types.ObjectId },
-    project_image_url: {
+    project_image_url_thumbnail: {
         type: String,
     },
+    project_image_url_contents: [
+        {
+            type: String,
+        },
+    ],
     title: {
         type: String,
     },
-    agency: {
+    team_name: {
         type: String,
     },
     start_date: {
@@ -18,19 +23,23 @@ const projectSchema = Schema({
     end_date: {
         type: String,
     },
-    proceeding: {
-        type: Boolean,
+    status: {
+        type: String,
     },
     contents: {
         type: String,
     },
-    project_url: [
-        {
-            url: {
-                type: String,
-            },
-        },
-    ],
+    project_url: {
+        type: String,
+    },
+    create_date: {
+        type: Date,
+        default: Date.now,
+    },
+    update_date: {
+        type: Date,
+        default: Date.now,
+    },
 });
 
 export default mongoose.model("Project", projectSchema);

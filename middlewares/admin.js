@@ -14,7 +14,6 @@ import Profile from "../models/Profile.js";
 import Project from "../models/Project.js";
 import Team from "../models/Team.js";
 import University from "../models/University.js";
-import Certificate from "../models/Certificate.js";
 
 AdminBro.registerAdapter(AdminBroMongoose);
 

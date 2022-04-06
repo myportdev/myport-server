@@ -2,7 +2,7 @@ import rateLimit from "express-rate-limit";
 
 export const api_limiter = rateLimit({
     windowMs: 1000, // 이 시간 동안
-    max: 2, // 최대 횟수
+    max: 15, // 최대 횟수
     delayMs: 0, // 요청 간 간격
     handler(req, res) {
         // 어겼을 경우 메시지

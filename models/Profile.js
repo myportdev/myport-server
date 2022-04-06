@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 const profileSchema = Schema({
     user: { ref: "User", type: Schema.Types.ObjectId },
-    short_introdution: {
+    introdution: {
         type: String,
     },
     status: {
@@ -21,6 +21,18 @@ const profileSchema = Schema({
             },
         },
     ],
+    completion_rate: {
+        type: Number,
+        default: 0,
+    },
+    create_date: {
+        type: Date,
+        default: Date.now,
+    },
+    update_date: {
+        type: Date,
+        default: Date.now,
+    },
 });
 
 export default mongoose.model("Profile", profileSchema);

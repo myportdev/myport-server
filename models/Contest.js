@@ -2,25 +2,23 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const contestSchema = Schema({
-    image_url: {
+    image_url_thumbnail: {
         type: String,
-        required: true,
+    },
+    image_url_introduction: {
+        type: String,
     },
     category: {
         type: String,
-        required: true,
     },
     title: {
         type: String,
-        required: true,
     },
     start_date: {
         type: String,
-        required: true,
     },
     end_date: {
         type: String,
-        required: true,
     },
     topic: {
         type: String,
@@ -33,19 +31,15 @@ const contestSchema = Schema({
     },
     detail_information: {
         type: String,
-        required: true,
     },
     site_url: {
         type: String,
-        required: true,
     },
     support_url: {
         type: String,
-        required: true,
     },
     location: {
         type: String,
-        required: true,
     },
     founder: {
         type: String,
@@ -64,5 +58,13 @@ const contestSchema = Schema({
             ref: "Interest",
         },
     ],
+    create_date: {
+        type: Date,
+        default: Date.now,
+    },
+    update_date: {
+        type: Date,
+        default: Date.now,
+    },
 });
 export default mongoose.model("Contest", contestSchema);

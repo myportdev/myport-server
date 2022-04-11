@@ -26,12 +26,12 @@ const user_service = {
         return user_status;
     },
 
-    find_interest_array: async (interest_array) => {
+    get_interest_array: async (interest_array) => {
         const interest_documents = await Interest.find().in("interest_name", interest_array);
         return interest_documents;
     },
 
-    find_university: async (college, major) => {
+    get_university: async (college, major) => {
         const university = await University.findOne({ university_name: college, major_name: major }).exec();
         return university;
     },
@@ -47,7 +47,7 @@ const user_service = {
         return await User.count();
     },
 
-    find_update_user: async (user, hash_password) => {
+    get_update_user: async (user, hash_password) => {
         const update_user = await User.findByIdAndUpdate(user.id, { password: hash_password }).exec();
         return update_user;
     },

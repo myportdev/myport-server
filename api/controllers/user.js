@@ -31,10 +31,10 @@ router.post("/", profile_upload.single("image"), verify.body(register_schema), a
         let interest_documents = [];
         if (interest) {
             const interest_array = interest.split(" ");
-            interest_documents = await user_service.find_interest_array(interest_array);
+            interest_documents = await user_service.get_interest_array(interest_array);
         }
 
-        const university = await user_service.find_university(college, major);
+        const university = await user_service.get_university(college, major);
 
         let small_image = "";
         let large_image = "";
@@ -247,7 +247,7 @@ router.patch("/password/reset", verify.body(reset_password_schema), async (req, 
         const result = bcrypt.compareSync(password, user.password);
         if (!result) {
             const hash_password = bcrypt.hashSync(password, 10);
-            await user_service.find_update_user(token_result, hash_password);
+            await user_service.get_update_user(token_result, hash_password);
             res.status(200).json({
                 message: "password has been successfully changed",
             });
@@ -372,7 +372,7 @@ router.patch("/password/change", auth_token, verify.body(change_password_schema)
         const result = bcrypt.compareSync(existing_password, user.password);
         if (result) {
             const hash_password = bcrypt.hashSync(new_password, 10);
-            await user_service.find_update_user(user, hash_password);
+            await user_service.get_update_user(user, hash_password);
             res.status(200).json({
                 message: "password has been successfully changed",
             });

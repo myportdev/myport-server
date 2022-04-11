@@ -220,7 +220,7 @@ router.get("/email/exist/:email", verify.params(email_schema), async (req, res, 
     }
 });
 
-router.patch("/password/reset", verify.body(reset_password_schema), async (req, res, next) => {
+router.put("/password/reset", verify.body(reset_password_schema), async (req, res, next) => {
     try {
         const { token, password } = req.body;
         const token_result = jwt_util.verify(token);
@@ -358,7 +358,7 @@ router.get("/join/email", auth_token, async (req, res, next) => {
     }
 });
 
-router.patch("/password/change", auth_token, verify.body(change_password_schema), async (req, res, next) => {
+router.put("/password/change", auth_token, verify.body(change_password_schema), async (req, res, next) => {
     try {
         const user_id = res.locals.user_id;
         const { existing_password, new_password } = req.body;

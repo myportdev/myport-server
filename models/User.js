@@ -57,12 +57,6 @@ const userSchema = Schema({
             ref: "Interest",
         },
     ],
-    team: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: "Team",
-        },
-    ],
     promotion: {
         type: Boolean,
     },

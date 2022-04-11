@@ -315,7 +315,7 @@ router.put("/accept/:team_id/:member_id", auth_token, check_read_update_team_obj
         if (team && team.team_leader._id == user_id) {
             await team_service.update_team(team.id, { $push: { team_members: member_id } });
             const update_team = await team_service.update_team(team.id, { $pull: { waiting_for_support: member_id } });
-            res.status(200).json({
+            await res.status(200).json({
                 team: update_team,
             });
             return;

@@ -345,8 +345,8 @@ router.get("/join/email", auth_token, async (req, res, next) => {
         const user_id = res.locals.user_id;
         const user = await user_service.get_user({ _id: user_id });
         if (!user) {
-            res.status(200).json({
-                message: "해당 유저가 존재하지 않습니다.",
+            res.status(400).json({
+                message: "user doesn't exist",
             });
         }
         const data = { email_account: user.email };
@@ -363,6 +363,11 @@ router.patch("/password/change", auth_token, verify.body(change_password_schema)
         const user_id = res.locals.user_id;
         const { existing_password, new_password } = req.body;
 
+        if (existing_password === new_password) {
+            res.status(400).json({
+                message: "please enter a password different from the previous password",
+            });
+        }
         const user = await user_service.get_user({ _id: user_id });
         const result = bcrypt.compareSync(existing_password, user.password);
         if (result) {

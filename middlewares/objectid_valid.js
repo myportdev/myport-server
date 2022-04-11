@@ -34,4 +34,26 @@ const check_create_team_object_id = (req, res, next) => {
     return next();
 };
 
-export { check_read_update_team_object_id, check_create_team_object_id };
+const check_user_object_id = (req, res, next) => {
+    const { user_id } = req.params;
+    if (user_id) {
+        if (!ObjectId.isValid(user_id)) {
+            res.status(400).send("objectid 형식이 잘못되었습니다.");
+            return;
+        }
+    }
+    return next();
+};
+
+const check_project_object_id = (req, res, next) => {
+    const { project_id } = req.params;
+    if (project_id) {
+        if (!ObjectId.isValid(project_id)) {
+            res.status(400).send("objectid 형식이 잘못되었습니다.");
+            return;
+        }
+    }
+    return next();
+};
+
+export { check_read_update_team_object_id, check_create_team_object_id, check_user_object_id, check_project_object_id };

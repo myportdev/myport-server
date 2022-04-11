@@ -76,4 +76,30 @@ const team_image_upload = multer({
     }),
 });
 
-export { profile_upload, team_image_upload };
+const project_image_upload = multer({
+    storage: multerS3({
+        s3: s3,
+        bucket: "myport-app-bucket/myport-images/projects",
+        contentType: multerS3.AUTO_CONTENT_TYPE,
+        shouldTransform: true,
+        transforms: [
+            {
+                id: "project",
+                key: function (req, file, cb) {
+                    let extension = path.extname(file.originalname);
+                    cb(null, Date.now().toString() + extension);
+                },
+                transform: function (req, file, cb) {
+                    if (file.fieldname == "introdution") {
+                        cb(null, sharp());
+                        return;
+                    }
+                    cb(null, sharp().resize(156, 120));
+                },
+            },
+        ],
+        acl: "public-read-write",
+    }),
+});
+
+export { profile_upload, team_image_upload, project_image_upload };

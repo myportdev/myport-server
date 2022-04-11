@@ -369,6 +369,11 @@ router.put("/password/change", auth_token, verify.body(change_password_schema), 
             });
         }
         const user = await user_service.get_user({ _id: user_id });
+        if (!user) {
+            res.status(400).json({
+                message: "user doesn't exist",
+            });
+        }
         const result = bcrypt.compareSync(existing_password, user.password);
         if (result) {
             const hash_password = bcrypt.hashSync(new_password, 10);

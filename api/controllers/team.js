@@ -2,23 +2,23 @@ import { Router } from "express";
 import team_service from "../services/team.js";
 import auth_token from "../../middlewares/auth_token.js";
 import { check_create_team_object_id, check_read_update_team_object_id } from "../../middlewares/objectid_valid.js";
+import { team_image_upload } from "../../middlewares/uploads.js";
+import { team_schema } from "../validations/team.js";
 import validator from "express-joi-validation";
 
 const router = Router();
 const verify = validator.createValidator({});
 
-import { team_image_upload } from "../../middlewares/uploads.js";
-import { create_team_schema } from "../validations/team.js";
-router.post("/", auth_token, team_image_upload.single("image"), verify.body(create_team_schema), check_create_team_object_id, async (req, res, next) => {
+router.post("/", auth_token, team_image_upload.single("image"), verify.body(team_schema), check_create_team_object_id, async (req, res, next) => {
     try {
         const user_id = res.locals.user_id;
         const team_leader = await team_service.get_user(user_id);
         let contest;
         let extracurricular;
         if (req.body.relation_contest) {
-            contest = await team_service.find_contest({ _id: req.body.relation_contest });
+            contest = await team_service.get_contest({ _id: req.body.relation_contest });
         } else if (req.body.relation_extracurricular) {
-            extracurricular = await team_service.find_extracurricular({ _id: req.body.relation_extracurricular });
+            extracurricular = await team_service.get_extracurricular({ _id: req.body.relation_extracurricular });
         }
 
         let team_image_url;
@@ -51,10 +51,10 @@ router.get("/", auth_token, async (req, res, next) => {
         let team_waiting_data = [];
         let teams_data = [];
         const [affiliated_team_leader, affiliated_team_members, waiting_for_support_team, teams] = await Promise.all([
-            team_service.find_affiliated_team({ team_leader: user.id }),
-            team_service.find_affiliated_team({ team_members: { $in: [user] } }),
-            team_service.find_affiliated_team({ waiting_for_support: { $in: [user] } }),
-            team_service.find_recruiting_list_team(user),
+            team_service.get_affiliated_team({ team_leader: user.id }),
+            team_service.get_affiliated_team({ team_members: { $in: [user] } }),
+            team_service.get_affiliated_team({ waiting_for_support: { $in: [user] } }),
+            team_service.get_recruiting_list_team(user),
         ]);
         for (const team of affiliated_team_leader) {
             team_leader_data.push({
@@ -128,7 +128,7 @@ router.get("/:team_id", auth_token, check_read_update_team_object_id, async (req
     try {
         const user_id = res.locals.user_id;
         const { team_id } = req.params;
-        const team = await team_service.find_detail_team({ _id: team_id });
+        const team = await team_service.get_detail_team({ _id: team_id });
 
         if (!team) {
             res.status(400).json({
@@ -162,15 +162,18 @@ router.get("/:team_id", auth_token, check_read_update_team_object_id, async (req
             team_members_boolean: false,
             team_leader: team.team_leader,
             team_leader_boolean: false,
+            team_waiting_boolean: false,
             recruiting: team.recruiting,
         };
-        // 팀장 인경우
         if (user_id == team.team_leader._id) {
             response_data.waiting_for_support = team.waiting_for_support;
             response_data.team_leader_boolean = true;
         }
-        if (user_id == team.team_members.includes(user_id)) {
+        if (team.team_members.find((member) => member.id == user_id)) {
             response_data.team_members_boolean = true;
+        }
+        if (team.waiting_for_support.find((user) => user.id == user_id)) {
+            response_data.team_waiting_boolean = true;
         }
         res.status(200).json({
             team: response_data,
@@ -181,7 +184,7 @@ router.get("/:team_id", auth_token, check_read_update_team_object_id, async (req
 });
 
 import { delete_team_s3_object } from "../../modules/delete_s3.js";
-router.put("/:team_id", auth_token, check_read_update_team_object_id, async (req, res, next) => {
+router.put("/:team_id", auth_token, team_image_upload.single("image"), verify.body(team_schema), check_read_update_team_object_id, async (req, res, next) => {
     try {
         const user_id = res.locals.user_id;
         const { team_id } = req.params;
@@ -198,9 +201,9 @@ router.put("/:team_id", auth_token, check_read_update_team_object_id, async (req
             let contest;
             let extracurricular;
             if (req.body.relation_contest) {
-                contest = await team_service.find_contest({ _id: req.body.relation_contest });
+                contest = await team_service.get_contest({ _id: req.body.relation_contest });
             } else if (req.body.relation_extracurricular) {
-                extracurricular = await team_service.find_extracurricular({ _id: req.body.relation_extracurricular });
+                extracurricular = await team_service.get_extracurricular({ _id: req.body.relation_extracurricular });
             }
 
             const team_data = {
@@ -264,7 +267,7 @@ router.delete("/:team_id", auth_token, check_read_update_team_object_id, async (
     }
 });
 // 모집 마감 버튼 -> 모집중 column을 반전 시킴
-router.patch("/recruitment/:team_id", auth_token, check_read_update_team_object_id, async (req, res, next) => {
+router.put("/recruitment/:team_id", auth_token, check_read_update_team_object_id, async (req, res, next) => {
     try {
         const user_id = res.locals.user_id;
         const { team_id } = req.params;
@@ -290,7 +293,7 @@ router.patch("/recruitment/:team_id", auth_token, check_read_update_team_object_
     }
 });
 
-router.patch("/accept/:team_id/:member_id", auth_token, check_read_update_team_object_id, async (req, res, next) => {
+router.put("/accept/:team_id/:member_id", auth_token, check_read_update_team_object_id, async (req, res, next) => {
     try {
         const user_id = res.locals.user_id;
         const { team_id, member_id } = req.params;
@@ -325,7 +328,7 @@ router.patch("/accept/:team_id/:member_id", auth_token, check_read_update_team_o
     }
 });
 
-router.patch("/refuse/:team_id/:member_id", auth_token, check_read_update_team_object_id, async (req, res, next) => {
+router.put("/refuse/:team_id/:member_id", auth_token, check_read_update_team_object_id, async (req, res, next) => {
     try {
         const user_id = res.locals.user_id;
         const { team_id, member_id } = req.params;
@@ -358,7 +361,7 @@ router.patch("/refuse/:team_id/:member_id", auth_token, check_read_update_team_o
     }
 });
 
-router.patch("/apply/:team_id", auth_token, check_read_update_team_object_id, async (req, res, next) => {
+router.post("/apply/:team_id", auth_token, check_read_update_team_object_id, async (req, res, next) => {
     try {
         const user_id = res.locals.user_id;
         const { team_id } = req.params;
@@ -397,7 +400,7 @@ router.patch("/apply/:team_id", auth_token, check_read_update_team_object_id, as
     }
 });
 
-router.delete("/secession/:team_id", auth_token, check_read_update_team_object_id, async (req, res, next) => {
+router.put("/secession/:team_id", auth_token, check_read_update_team_object_id, async (req, res, next) => {
     try {
         const user_id = res.locals.user_id;
         const { team_id } = req.params;

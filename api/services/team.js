@@ -13,15 +13,15 @@ const team_service = {
         const user = await User.findById({ _id: user_id }).exec();
         return user;
     },
-    find_contest: async (data) => {
+    get_contest: async (data) => {
         const contest = await Contest.findById({ ...data }).exec();
         return contest;
     },
-    find_extracurricular: async (data) => {
+    get_extracurricular: async (data) => {
         const extracurricular = await Extracurricular.findById({ ...data }).exec();
         return extracurricular;
     },
-    find_affiliated_team: async (data) => {
+    get_affiliated_team: async (data) => {
         const team = await Team.find({ ...data })
             .select("team_members relation_contest relation_extracurricular team_name team_type team_image_url recruiting")
             .populate({
@@ -36,7 +36,7 @@ const team_service = {
             .exec();
         return team;
     },
-    find_recruiting_list_team: async (user) => {
+    get_recruiting_list_team: async (user) => {
         const team = await Team.find()
             .nor([{ team_leader: user }, { team_members: { $in: [user] } }, { waiting_for_support: { $in: [user] } }])
             .select("team_members relation_contest relation_extracurricular team_name team_type team_image_url recruiting")
@@ -52,7 +52,7 @@ const team_service = {
             .exec();
         return team;
     },
-    find_detail_team: async (data) => {
+    get_detail_team: async (data) => {
         const team = await Team.findById({ ...data })
             .populate({
                 path: "team_leader",

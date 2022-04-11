@@ -56,4 +56,40 @@ const check_project_object_id = (req, res, next) => {
     return next();
 };
 
-export { check_read_update_team_object_id, check_create_team_object_id, check_user_object_id, check_project_object_id };
+const check_activity_push_bookmark_object_id = (req, res, next) => {
+    const { contest_id, extracurricular_id } = req.body;
+    if (contest_id) {
+        if (!ObjectId.isValid(contest_id)) {
+            res.status(400).send("objectid 형식이 잘못되었습니다.");
+            return;
+        }
+    }
+
+    if (extracurricular_id) {
+        if (!ObjectId.isValid(extracurricular_id)) {
+            res.status(400).send("objectid 형식이 잘못되었습니다.");
+            return;
+        }
+    }
+    return next();
+};
+
+const check_activity_pop_bookmark_object_id = (req, res, next) => {
+    const { contest_id, extracurricular_id } = req.params;
+    if (contest_id) {
+        if (!ObjectId.isValid(contest_id)) {
+            res.status(400).send("objectid 형식이 잘못되었습니다.");
+            return;
+        }
+    }
+
+    if (extracurricular_id) {
+        if (!ObjectId.isValid(extracurricular_id)) {
+            res.status(400).send("objectid 형식이 잘못되었습니다.");
+            return;
+        }
+    }
+    return next();
+};
+
+export { check_read_update_team_object_id, check_create_team_object_id, check_user_object_id, check_project_object_id, check_activity_push_bookmark_object_id, check_activity_pop_bookmark_object_id };

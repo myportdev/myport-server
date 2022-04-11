@@ -54,4 +54,26 @@ const profile_upload = multer({
     }),
 });
 
-export { profile_upload };
+const team_image_upload = multer({
+    storage: multerS3({
+        s3: s3,
+        bucket: "myport-app-bucket/myport-images/team_images",
+        contentType: multerS3.AUTO_CONTENT_TYPE,
+        shouldTransform: true,
+        transforms: [
+            {
+                id: "Team",
+                key: function (req, file, cb) {
+                    let extension = path.extname(file.originalname);
+                    cb(null, Date.now().toString() + extension);
+                },
+                transform: function (req, file, cb) {
+                    cb(null, sharp().resize(88, 120));
+                },
+            },
+        ],
+        acl: "public-read-write",
+    }),
+});
+
+export { profile_upload, team_image_upload };

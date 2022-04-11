@@ -28,7 +28,7 @@ router.get("/", auth_token, async (req, res, next) => {
                 });
             }
         }
-        const teams = await home_service.find_recruiting_list_team(user);
+        const teams = await home_service.get_recruiting_list_team(user);
         let teams_data = [];
         if (teams) {
             for (const team of teams) {

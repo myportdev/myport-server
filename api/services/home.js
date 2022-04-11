@@ -51,7 +51,7 @@ const home_service = {
         return contests;
     },
 
-    find_recruiting_list_team: async (user) => {
+    get_recruiting_list_team: async (user) => {
         const team = await Team.find()
             .nor([{ team_leader: user }, { team_members: { $in: [user] } }, { waiting_for_support: { $in: [user] } }])
             .select("team_members relation_contest relation_extracurricular team_name team_type team_image_url recruiting")

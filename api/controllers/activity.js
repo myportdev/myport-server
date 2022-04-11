@@ -126,11 +126,11 @@ router.get("/contest/:contest_id", auth_token, async (req, res, next) => {
                 like: contest.likes,
                 founder: contest.founder ? contest.founder : "",
             };
-            res.status(200).json({ response_contest });
+            res.status(200).json({ contest: response_contest });
             return;
         }
         res.status(400).json({
-            message: "해당 공모전이 존재하지 않습니다.",
+            message: "contest doesn't exist",
         });
     } catch (error) {
         next(error);
@@ -177,11 +177,11 @@ router.get("/extracurricular/:extracurricular_id", auth_token, async (req, res, 
                 founder: extracurricular.founder ? extracurricular.founder : "",
             };
 
-            res.status(200).json({ response_extracurricular });
+            res.status(200).json({ extracurricular: response_extracurricular });
             return;
         }
         res.status(400).json({
-            message: "해당 대외활동 존재하지 않습니다.",
+            message: "extracurricular doesn't exist",
         });
     } catch (error) {
         next(error);
@@ -196,14 +196,14 @@ router.post("/contest/interest", auth_token, check_activity_push_bookmark_object
         const [user, contest] = await Promise.all([activity_service.get_user(user_id), activity_service.get_contest(contest_id)]);
         if (!contest) {
             res.status(400).json({
-                message: "해당 공모전이 존재하지 않습니다.",
+                message: "contest doesn't exist",
             });
             return;
         }
 
         if (user.interest_contest.includes(contest_id)) {
             res.status(400).json({
-                message: "해당 공모전이 존재합니다.",
+                message: "contest exists in the user's interest contest",
             });
             return;
         }
@@ -224,14 +224,14 @@ router.post("/extracurricular/interest", auth_token, async (req, res, next) => {
         const [user, extracurricular] = await Promise.all([activity_service.get_user(user_id), activity_service.get_extracurricular(extracurricular_id)]);
         if (!extracurricular) {
             res.status(400).json({
-                message: "해당 대외할동이 존재하지 않습니다.",
+                message: "extracurricular doesn't exist",
             });
             return;
         }
 
         if (user.interest_extracurricular.includes(extracurricular_id)) {
             res.status(400).json({
-                message: "해당 대활활동이 존재합니다.",
+                message: "extracurricular exists in the user's interest extracurricular",
             });
             return;
         }
@@ -261,7 +261,7 @@ router.delete("/contest/interest/:contest_id", auth_token, check_activity_pop_bo
             return;
         }
         res.status(400).json({
-            message: "해당 공모전이 존재하지 않습니다.",
+            message: "contest doesn't exist",
         });
     } catch (error) {
         next(error);
@@ -283,7 +283,7 @@ router.delete("/extracurricular/interest/:extracurricular_id", auth_token, async
             return;
         }
         res.status(400).json({
-            message: "해당 대외활동이 존재하지 않습니다.",
+            message: "extracurricular doesn't exist",
         });
     } catch (error) {
         next(error);

@@ -62,9 +62,17 @@ const activity_service = {
         return update_extracurricular;
     },
 
-    // user
     get_user: async (user_id) => {
-        const user = await await User.findById(user_id).exec();
+        const user = await User.findById(user_id).exec();
+        return user;
+    },
+
+    delete_user_interest_contest: async (user_id, contest_id) => {
+        const user = await User.findByIdAndUpdate(user_id, { $pull: { interest_contest: contest_id } }, { new: true }).exec();
+        return user;
+    },
+    delete_user_interest_extracurricular: async (user_id, extracurricular_id) => {
+        const user = await User.findByIdAndUpdate(user_id, { $pull: { interest_extracurricular: extracurricular_id } }, { new: true }).exec();
         return user;
     },
 };

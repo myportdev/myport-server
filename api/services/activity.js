@@ -8,7 +8,7 @@ const activity_service = {
         const contests = await Contest.find()
             .populate("relation_category", "interest_name")
             .select("_id image_url_thumbnail category title relation_category end_date views likes founder")
-            .sort({ start_date: 1 })
+            .sort({ end_date: 1 })
             .exec();
         return contests;
     },
@@ -37,7 +37,7 @@ const activity_service = {
         const extracurriculars = await Extracurricular.find()
             .populate("relation_category", "interest_name")
             .select("_id image_url_thumbnail category title relation_category end_date views likes")
-            .sort({ start_date: 1 })
+            .sort({ end_date: 1 })
             .exec();
         return extracurriculars;
     },

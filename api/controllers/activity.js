@@ -2,8 +2,18 @@ import { Router } from "express";
 import auth_token from "../../middlewares/auth_token.js";
 import activity_service from "../services/activity.js";
 import date_difference from "../../modules/date_difference.js";
+import { delete_contest, delete_extracurricular } from "../../modules/delete_activity.js";
 
 const router = Router();
+
+router.get("/test", async (req, res, next) => {
+    // delete_contest();
+    delete_extracurricular();
+
+    res.status(200).json({
+        message: "완료",
+    });
+});
 
 router.get("/contests", auth_token, async (req, res, next) => {
     try {

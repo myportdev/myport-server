@@ -7,7 +7,7 @@ const date_difference = (str_date) => {
     let end_date = new Date(parseInt(date_array[0]), parseInt(date_array[1]), parseInt(date_array[2]));
     let now_date = new Date(year, month, day);
     let time_remaining = end_date.getTime() - now_date.getTime();
-    let d_day = time_remaining / (1000 * 60 * 60 * 24) + 1;
+    let d_day = time_remaining / (1000 * 60 * 60 * 24);
     return d_day;
 };
 

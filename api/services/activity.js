@@ -1,6 +1,7 @@
 import User from "../../models/User.js";
 import Contest from "../../models/Contest.js";
 import Extracurricular from "../../models/Extracurricular.js";
+import Team from "../../models/Team.js";
 
 const activity_service = {
     // contest
@@ -67,6 +68,11 @@ const activity_service = {
         return user;
     },
 
+    get_users: async () => {
+        const user = await User.find().exec();
+        return user;
+    },
+
     delete_user_interest_contest: async (user_id, contest_id) => {
         const user = await User.findByIdAndUpdate(user_id, { $pull: { interest_contest: contest_id } }, { new: true }).exec();
         return user;
@@ -74,6 +80,16 @@ const activity_service = {
     delete_user_interest_extracurricular: async (user_id, extracurricular_id) => {
         const user = await User.findByIdAndUpdate(user_id, { $pull: { interest_extracurricular: extracurricular_id } }, { new: true }).exec();
         return user;
+    },
+
+    get_team_relation_contest: async (contest_id) => {
+        const teams = await Team.find({ relation_contest: contest_id });
+        return teams;
+    },
+
+    get_team_relation_extracurricular: async (extracurricular_id) => {
+        const teams = await Team.find({ relation_extracurricular: extracurricular_id });
+        return teams;
     },
 };
 

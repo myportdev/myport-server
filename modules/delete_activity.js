@@ -7,7 +7,6 @@ const delete_contest = async () => {
     for (const contest of contests) {
         const str_date = contest.end_date;
         let d_day = date_difference(str_date);
-        console.log(d_day);
         if (d_day < 0) {
             for (const user of users) {
                 if (user.interest_contest.includes(contest.id)) {
@@ -16,7 +15,6 @@ const delete_contest = async () => {
             }
             const relation_contest_teams = await activity_service.get_team_relation_contest(contest.id);
             if (!relation_contest_teams.length) {
-                console.log("삭제완료");
                 await activity_service.delete_contest(contest.id);
             }
         }
@@ -37,7 +35,6 @@ const delete_extracurricular = async (extracurricular_id) => {
                 }
             }
             const relation_extracurricular_teams = await activity_service.get_team_relation_extracurricular(extracurricular.id);
-            console.log(relation_extracurricular_teams.length);
             if (!relation_extracurricular_teams.length) {
                 await activity_service.delete_extracurricular(extracurricular.id);
             }

@@ -9,6 +9,7 @@ import helmet from "helmet";
 import cache from "./util/cache.js";
 import { api_limiter } from "./middlewares/api_limit.js";
 import { scheduleJob } from "node-schedule";
+import { delete_contest, delete_extracurricular } from "./modules/delete_activity.js";
 
 const express_server = () => {
     const app = express();
@@ -29,6 +30,8 @@ const express_server = () => {
 
     scheduleJob("* * 0 * * *", async () => {
         await cache.set("today_join", 0);
+        await delete_contest();
+        await delete_extracurricular();
     });
 
     app.listen(configuration().port, () => {

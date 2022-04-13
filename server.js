@@ -9,7 +9,6 @@ import helmet from "helmet";
 import cache from "./util/cache.js";
 import { api_limiter } from "./middlewares/api_limit.js";
 import { scheduleJob } from "node-schedule";
-import delete_activity from "./modules/delete_activity.js";
 
 const express_server = () => {
     const app = express();

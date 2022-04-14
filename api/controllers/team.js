@@ -99,6 +99,19 @@ router.get("/", auth_token, async (req, res, next) => {
         }
 
         for (const team of teams) {
+            if (team && team.relation_contest) {
+                const str_date = team.relation_contest.end_date;
+                let d_day = date_difference(str_date);
+                if (d_day < 0) {
+                    continue;
+                }
+            } else if (team && team.relation_extracurricular) {
+                const str_date = team.relation_extracurricular.end_date;
+                let d_day = date_difference(str_date);
+                if (d_day < 0) {
+                    continue;
+                }
+            }
             teams_data.push({
                 _id: team.id,
                 recruiting: team.recruiting,

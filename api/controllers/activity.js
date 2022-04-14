@@ -15,6 +15,9 @@ router.get("/contests", auth_token, async (req, res, next) => {
         for (const contest of contests) {
             const str_date = contest.end_date;
             let d_day = date_difference(str_date);
+            if (d_day < 0) {
+                continue;
+            }
 
             let interest_boolean = false;
 
@@ -55,6 +58,10 @@ router.get("/extracurriculars", auth_token, async (req, res, next) => {
         for (const extracurricular of extracurriculars) {
             const str_date = extracurricular.end_date;
             let d_day = date_difference(str_date);
+            if (d_day < 0) {
+                continue;
+            }
+
             let interest_boolean = false;
 
             for (const user_extracurricular of user.interest_extracurricular) {

@@ -42,12 +42,7 @@ const home_service = {
     },
 
     get_contests: async () => {
-        const contests = await Contest.find()
-            .populate("relation_category", "interest_name")
-            .select("_id image_url_thumbnail title relation_category end_date founder")
-            .limit(15)
-            .sort({ start_date: 1 })
-            .exec();
+        const contests = await Contest.find().populate("relation_category", "interest_name").select("_id image_url_thumbnail title relation_category end_date founder").sort({ end_date: 1 }).exec();
         return contests;
     },
 
@@ -57,14 +52,13 @@ const home_service = {
             .select("team_members relation_contest relation_extracurricular team_name team_type team_image_url recruiting")
             .populate({
                 path: "relation_contest",
-                select: "image_url_thumbnail title",
+                select: "image_url_thumbnail title end_date",
             })
             .populate({
                 path: "relation_extracurricular",
-                select: "image_url_thumbnail title",
+                select: "image_url_thumbnail title end_date",
             })
             .sort({ create_date: -1 })
-            .limit(6)
             .exec();
         return team;
     },

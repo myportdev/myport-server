@@ -18,6 +18,9 @@ router.get("/", auth_token, async (req, res, next) => {
             for (const contest of contests) {
                 const str_date = contest.end_date;
                 let d_day = date_difference(str_date);
+                if (d_day < 0) {
+                    continue;
+                }
                 contests_data.push({
                     _id: contest.id,
                     image_url_thumbnail: contest.image_url_thumbnail,
@@ -32,6 +35,19 @@ router.get("/", auth_token, async (req, res, next) => {
         let teams_data = [];
         if (teams) {
             for (const team of teams) {
+                if (team && team.relation_contest) {
+                    const str_date = team.relation_contest.end_date;
+                    let d_day = date_difference(str_date);
+                    if (d_day < 0) {
+                        continue;
+                    }
+                } else if (team && team.relation_extracurricular) {
+                    const str_date = team.relation_extracurricular.end_date;
+                    let d_day = date_difference(str_date);
+                    if (d_day < 0) {
+                        continue;
+                    }
+                }
                 teams_data.push({
                     _id: team.id,
                     recruiting: team.recruiting,
@@ -51,8 +67,8 @@ router.get("/", auth_token, async (req, res, next) => {
 
         res.status(200).json({
             users: same_interest_users,
-            contests: contests_data,
-            teams: teams_data,
+            contests: contests_data.slice(0, 15),
+            teams: teams_data.slice(0, 10),
             completion_rate: profile.completion_rate + portfolio.completion_rate,
         });
     } catch (error) {

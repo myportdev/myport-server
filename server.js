@@ -13,6 +13,15 @@ import { delete_contest, delete_extracurricular } from "./modules/delete_activit
 
 const express_server = () => {
     const app = express();
+
+    let isDisableKeepAlive = false;
+    app.use(function (req, res, next) {
+        if (isDisableKeepAlive) {
+            res.set("Connection", "close");
+        }
+        next();
+    });
+
     connect();
 
     app.use(cors());
@@ -34,8 +43,17 @@ const express_server = () => {
         await delete_extracurricular();
     });
 
-    app.listen(configuration().port, () => {
+    const app_server = app.listen(configuration().port, () => {
+        process.send("ready");
         console.log(`server is running ${configuration().port}`);
+    });
+
+    process.on("SIGINT", function () {
+        isDisableKeepAlive = true;
+        app_server.close(function () {
+            console.log("server closed");
+            process.exit(0);
+        });
     });
 };
 

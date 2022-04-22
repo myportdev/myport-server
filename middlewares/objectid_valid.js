@@ -1,0 +1,95 @@
+import mongoose from "mongoose";
+
+const { ObjectId } = mongoose.Types;
+
+const check_read_update_team_object_id = (req, res, next) => {
+    const { team_id, member_id } = req.params;
+    if (!ObjectId.isValid(team_id)) {
+        res.status(400).send("objectid 형식이 잘못되었습니다.");
+        return;
+    }
+    if (member_id) {
+        if (!ObjectId.isValid(member_id)) {
+            res.status(400).send("objectid 형식이 잘못되었습니다.");
+            return;
+        }
+    }
+    return next();
+};
+
+const check_create_team_object_id = (req, res, next) => {
+    const { relation_contest, relation_extracurricular } = req.body;
+    if (relation_contest) {
+        if (!ObjectId.isValid(relation_contest)) {
+            res.status(400).send("objectid 형식이 잘못되었습니다.");
+            return;
+        }
+    }
+    if (relation_extracurricular) {
+        if (!ObjectId.isValid(relation_extracurricular)) {
+            res.status(400).send("objectid 형식이 잘못되었습니다.");
+            return;
+        }
+    }
+    return next();
+};
+
+const check_user_object_id = (req, res, next) => {
+    const { user_id } = req.params;
+    if (user_id) {
+        if (!ObjectId.isValid(user_id)) {
+            res.status(400).send("objectid 형식이 잘못되었습니다.");
+            return;
+        }
+    }
+    return next();
+};
+
+const check_project_object_id = (req, res, next) => {
+    const { project_id } = req.params;
+    if (project_id) {
+        if (!ObjectId.isValid(project_id)) {
+            res.status(400).send("objectid 형식이 잘못되었습니다.");
+            return;
+        }
+    }
+    return next();
+};
+
+const check_activity_push_bookmark_object_id = (req, res, next) => {
+    const { contest_id, extracurricular_id } = req.body;
+    if (contest_id) {
+        if (!ObjectId.isValid(contest_id)) {
+            res.status(400).send("objectid 형식이 잘못되었습니다.");
+            return;
+        }
+    }
+
+    if (extracurricular_id) {
+        if (!ObjectId.isValid(extracurricular_id)) {
+            res.status(400).send("objectid 형식이 잘못되었습니다.");
+            return;
+        }
+    }
+    return next();
+};
+
+const check_activity_pop_bookmark_object_id = (req, res, next) => {
+    const { contest_id, extracurricular_id } = req.params;
+    if (contest_id) {
+        if (!ObjectId.isValid(contest_id)) {
+            res.status(400).send("objectid 형식이 잘못되었습니다.");
+            return;
+        }
+    }
+
+    if (extracurricular_id) {
+        if (!ObjectId.isValid(extracurricular_id)) {
+            res.status(400).send("objectid 형식이 잘못되었습니다.");
+            return;
+        }
+    }
+    return next();
+};
+
+export { check_read_update_team_object_id, check_create_team_object_id, check_user_object_id, check_project_object_id, check_activity_push_bookmark_object_id, check_activity_pop_bookmark_object_id };
